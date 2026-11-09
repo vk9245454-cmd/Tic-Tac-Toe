@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tic Tac Toe AI</title>
+
+    <!-- jQuery -->
+     <script src="jq.jquary"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <main class="game-wrapper">
+
+        <!-- =========================
+             HOME SCREEN
+        ========================== -->
+
+        <section class="screen home-screen active-screen" id="homeScreen">
+
+            <div class="home-content">
+
+                <div class="brand-mark mark">
+                    <i class="fa-solid fa-gamepad"></i>
+                </div>
+
+                <h1>
+                    Tic Tac Toe
+                    <span>AI</span>
+                </h1>
+
+                <p>
+                    Play against the computer and <br>try to beat the AI.
+                </p>
+
+                <div class="player-name-box">
+                    <input type="text" id="playerName" placeholder="Enter your name" maxlength="20" autocomplete="off">
+                </div>
+
+                <button id="playBtn" class="primary-btn" type="button">
+                    <i class="fa-solid fa-play"></i>
+                    PLAY
+                </button>
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             MODE SCREEN
+        ========================== -->
+
+        <section class="screen mode-screen" id="modeScreen">
+
+            <div class="mode-content">
+
+                <div class="section-icon">
+                    <i class="fa-solid fa-sliders"></i>
+                </div>
+
+                <h1>Ch<span>oo</span>se Game</h1>
+
+                <p class="screen-description">
+                    Select the difficulty and board size.
+                </p>
+
+                <div class="select">
+
+                    <!-- DIFFICULTY -->
+
+                    <div class="selection-section">
+
+                        <div class="selection-title">
+                            <i class="fa-solid fa-brain"></i>
+                            <span>Difficulty</span>
+                        </div>
+
+                        <div class="selection-row">
+
+                            <button class="mode-btn" data-mode="easy" type="button">
+                                Easy
+                            </button>
+
+                            <button class="mode-btn" data-mode="normal" type="button">
+                                Normal
+                            </button>
+
+                            <button class="mode-btn" data-mode="hard" type="button">
+                                Hard
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BOARD SIZE -->
+
+                    <div class="selection-section">
+
+                        <div class="selection-title">
+                            <i class="fa-solid fa-border-all"></i>
+                            <span>Board Size</span>
+                        </div>
+
+                        <div class="selection-row board-size-row">
+
+                            <button class="board-size-btn" data-size="3" type="button">
+                                <strong>3 × 3</strong>
+                                <small>Classic</small>
+                            </button>
+
+                            <button class="board-size-btn" data-size="5" type="button">
+                                <strong>5 × 5</strong>
+                                <small>Medium</small>
+                            </button>
+
+                            <button class="board-size-btn" data-size="7" type="button">
+                                <strong>7 × 7</strong>
+                                <small>Large</small>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- PLAY GAME -->
+
+                <button id="startGameBtn" class="primary-btn start-game-btn" type="button" disabled>
+                    <i class="fa-solid fa-play"></i>
+                    PLAY GAME
+                </button>
+
+
+                <!-- BACK -->
+
+                <button id="backHomeBtn" class="secondary-btn" type="button">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    BACK
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             GAME SCREEN
+        ========================== -->
+
+        <section class="screen game-screen" id="gameScreen">
+
+
+            <!-- GAME MENU -->
+
+            <div class="game-menu">
+
+                <button id="menuBtn" class="menu-icon-btn" type="button" aria-label="Open game menu"
+                    aria-expanded="false">
+                    <!-- fa-light does not work in the free Font Awesome CDN -->
+                    <i class="fa-solid fa-chart-simple"></i>
+                </button>
+
+
+                <div class="menu-options" id="menuOptions">
+
+                    <button id="newRoundBtn" type="button">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>New Round</span>
+                    </button>
+
+                    <button id="changeModeBtn" type="button">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <span>Change Mode</span>
+                    </button>
+
+                    <button id="resetScoreBtn" type="button">
+                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                        <span>Reset Score</span>
+                    </button>
+
+                    <button id="backHomeBtnMenu" type="button">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Home</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- GAME HEADER -->
+
+            <section class="top-panel">
+
+                <div class="game-title-wrap">
+
+                    <h1>
+                        Tic Tac Toe
+                        <span>AI</span>
+                    </h1>
+
+                    <p id="message">
+                        Your turn.
+                    </p>
+
+                </div>
+
+
+                <!-- SCORE -->
+
+                <div class="score-row">
+
+                    <div class="score-card player-card">
+
+                        <span>YOU</span>
+
+                        <strong id="playerScore">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="score-card draw-card">
+
+                        <span>DRAW</span>
+
+                        <strong id="drawScore">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="score-card ai-card">
+
+                        <span>AI</span>
+
+                        <strong id="aiScore">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- GAME INFO -->
+
+                <div class="game-info-row">
+
+                    <div class="info-pill">
+
+                        <span class="info-dot"></span>
+
+                        <span>
+                            MODE:
+                            <strong id="currentMode">
+                                —
+                            </strong>
+                        </span>
+
+                        <span class="info-dot"></span>
+
+                    </div>
+
+
+                    <div class="info-pill">
+
+                        <i class="fa-solid fa-border-all"></i>
+
+                        <span>
+                            BOARD:
+                            <strong id="currentBoardSize">
+                                —
+                            </strong>
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- BOARD -->
+
+            <div class="board-area">
+
+                <div class="board-wrap" id="boardWrap">
+
+                    <section class="board" id="gameBoard" aria-label="Tic Tac Toe board">
+                    </section>
+
+
+                    <!-- RESULT OVERLAY -->
+
+                    <section class="result-box" id="resultBox">
+
+                        <!-- TROPHY -->
+                        <div class="result-icon">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+
+                        <!-- RESULT LABEL -->
+                        <span id="resultLabel">
+                            ROUND COMPLETE
+                        </span>
+
+                        <!-- RESULT -->
+                        <strong id="resultText">
+                            YOU WIN!
+                        </strong>
+
+                        <p id="resultSubtext">
+                            Great move!
+                        </p>
+
+
+                        <!-- LEADERBOARD -->
+                        <div class="leaderboard">
+
+                            <div class="leaderboard-header">
+                                <div class="leaderboard-title">
+                                    <i class="fa-solid fa-trophy"></i>
+                                    <h2>Leaderboard</h2>
+                                </div>
+
+                                <span>TOP PLAYERS BY WINS</span>
+                            </div>
+
+                            <ol id="leaderboardList">
+                                <li>Loading...</li>
+                            </ol>
+
+                        </div>
+
+
+                        <!-- RESTART -->
+                        <button id="restartRoundBtn" class="restart-btn" type="button">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            RESTART ROUND
+                        </button>
+
+                    </section>
+
+                </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
